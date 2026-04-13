@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NBA Player Quiz | Brayden Hendricks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://js.puter.com/v2/"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0a1628;
+      --navy2: #112240;
+      --blue: #1d4ed8;
+      --orange: #f97316;
+      --gold: #fbbf24;
+      --white: #ffffff;
+      --gray: #94a3b8;
+      --light: #e2e8f0;
+      --card: #1e3a5f;
+      --correct: #22c55e;
+      --wrong: #ef4444;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    .topnav {
+      background: rgba(0,0,0,0.4);
+      padding: 12px 24px;
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topnav a { color: var(--gray); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+    .topnav a:hover { color: var(--white); }
+
+    /* HEADER */
+    .game-header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: linear-gradient(180deg, #0d1f3c 0%, var(--navy) 100%);
+    }
+    .game-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .game-header p { color: var(--gray); margin-top: 8px; font-size: 1rem; }
+
+    /* SCOREBOARD */
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 16px 20px;
+      flex-wrap: wrap;
+    }
+    .score-pill {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .score-pill span { color: var(--gold); font-size: 1.1rem; }
+    .score-pill .label { color: var(--gray); font-weight: 400; }
+
+    /* MAIN GAME AREA */
+    .game-wrap { max-width: 680px; margin: 0 auto; padding: 16px 16px 60px; }
+
+    /* START SCREEN */
+    .start-screen {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .start-screen h2 { font-family: var(--font-display); font-size: 2rem; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .start-screen p { color: var(--gray); line-height: 1.7; margin-bottom: 1.5rem; font-size: 0.97rem; }
+    .how-to {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .how-to li { color: var(--gray); font-size: 0.9rem; margin-bottom: 6px; line-height: 1.6; list-style: none; padding-left: 20px; position: relative; }
+    .how-to li::before { content: '🏀'; position: absolute; left: 0; font-size: 0.8rem; }
+
+    /* DIFFICULTY SELECTOR */
+    .diff-grid { display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .diff-btn {
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: var(--gray);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .diff-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .diff-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+    /* START BUTTON */
+    .start-btn {
+      padding: 14px 48px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .start-btn:hover { background: #ea6c09; transform: scale(1.02); }
+    .start-btn:active { transform: scale(0.98); }
+
+    /* QUESTION CARD */
+    .question-card {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1.8rem;
+      margin-top: 16px;
+      display: none;
+    }
+    .question-card.visible { display: block; }
+
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .q-num { font-size: 0.8rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+    .q-progress {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      flex: 1;
+      margin: 0 12px;
+      overflow: hidden;
+    }
+    .q-progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s; }
+    .timer-badge {
+      background: var(--navy);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 36px;
+      text-align: center;
+    }
+    .timer-badge.urgent { color: var(--wrong); border-color: var(--wrong); animation: pulse 0.5s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+    /* TEAM BADGE */
+    .team-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(249,115,22,0.15);
+      border: 1px solid rgba(249,115,22,0.3);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: 1.2rem;
+    }
+
+    /* STATS GRID */
+    .stats-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .stat-box .stat-val {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-box .stat-name {
+      font-size: 0.72rem;
+      color: var(--gray);
+      margin-top: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* HINT */
+    .hint-text {
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-style: italic;
+      margin-bottom: 1.2rem;
+      min-height: 20px;
+    }
+
+    /* OPTIONS */
+    .options-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .opt-btn {
+      padding: 14px 12px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: rgba(251,191,36,0.08); color: var(--gold); }
+    .opt-btn.correct { background: rgba(34,197,94,0.2); border-color: var(--correct); color: var(--correct); }
+    .opt-btn.wrong { background: rgba(239,68,68,0.2); border-color: var(--wrong); color: var(--wrong); }
+    .opt-btn:disabled { cursor: not-allowed; }
+
+    /* FEEDBACK */
+    .feedback {
+      margin-top: 1.2rem;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    .feedback.visible { display: flex; }
+    .feedback.correct-fb { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--correct); }
+    .feedback.wrong-fb { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--wrong); }
+
+    .next-btn {
+      display: block;
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px;
+      background: var(--blue);
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+    }
+    .next-btn.visible { display: block; }
+    .next-btn:hover { background: #1e40af; }
+
+    /* RESULTS SCREEN */
+    .results-screen {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-top: 16px;
+      display: none;
+    }
+    .results-screen.visible { display: block; }
+    .trophy { font-size: 4rem; margin-bottom: 1rem; }
+    .final-score {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--gold), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .grade-label { font-size: 1.1rem; color: var(--gray); margin-bottom: 1.5rem; }
+    .stats-summary {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .summary-item { text-align: center; }
+    .summary-item .val { font-size: 1.8rem; font-weight: 700; color: var(--white); }
+    .summary-item .lbl { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .replay-btn {
+      padding: 14px 40px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .replay-btn:hover { background: #ea6c09; }
+
+    /* LOADING OVERLAY */
+    .loading-overlay {
+      text-align: center;
+      padding: 3rem 1rem;
+      display: none;
+    }
+    .loading-overlay.visible { display: block; }
+    .ball-spin {
+      font-size: 3rem;
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p { color: var(--gray); font-size: 0.95rem; }
+
+    footer { background: rgba(0,0,0,0.3); color: var(--gray); text-align: center; padding: 1.5rem; font-size: 0.83rem; margin-top: 2rem; }
+    footer a { color: var(--gray); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html">&#8592; Portfolio Home</a>
+  <a href="resume.html">Résumé</a>
+  <a href="scratch.html">Sports Analytics Page</a>
+</nav>
+
+<div class="game-header">
+  <h1>NBA WHO AM I?</h1>
+  <p>Can you guess the player from their stats?</p>
+</div>
+
+<div class="scoreboard">
+  <div class="score-pill"><span class="label">Score</span> <span id="score-display">0</span></div>
+  <div class="score-pill"><span class="label">Streak</span> <span id="streak-display">0</span> 🔥</div>
+  <div class="score-pill"><span class="label">Best Streak</span> <span id="best-display">0</span></div>
+</div>
+
+<div class="game-wrap">
+
+  <!-- START SCREEN -->
+  <div class="start-screen" id="start-screen">
+    <h2>READY TO BALL?</h2>
+    <p>You'll see real NBA stats and the player's team — your job is to figure out who the player is from 4 choices. The harder the difficulty, the trickier the players!</p>
+    <div class="how-to">
+      <ul>
+        <li>Stats shown: PPG, RPG, APG, FG%, 3P%, and more</li>
+        <li>You'll also see the player's team name</li>
+        <li>10 questions per round — beat the clock!</li>
+        <li>Longer streaks = bigger score multiplier</li>
+      </ul>
+    </div>
+    <p style="color:var(--gray);font-size:0.88rem;margin-bottom:1.2rem">Choose difficulty:</p>
+    <div class="diff-grid">
+      <button class="diff-btn active" data-diff="easy" onclick="setDiff(this)">⭐ Easy</button>
+      <button class="diff-btn" data-diff="medium" onclick="setDiff(this)">⭐⭐ Medium</button>
+      <button class="diff-btn" data-diff="hard" onclick="setDiff(this)">⭐⭐⭐ Hard</button>
+    </div>
+    <button class="start-btn" onclick="startGame()">TIP OFF 🏀</button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="ball-spin">🏀</div>
+    <p>Loading player data...</p>
+  </div>
+
+  <!-- QUESTION CARD -->
+  <div class="question-card" id="question-card">
+    <div class="q-meta">
+      <div class="q-num" id="q-num">Q 1 / 10</div>
+      <div class="q-progress"><div class="q-progress-fill" id="q-fill" style="width:10%"></div></div>
+      <div class="timer-badge" id="timer">15</div>
+    </div>
+
+    <div class="team-badge" id="team-badge">🏀 Team</div>
+    <div class="stats-label">2024-25 Season Stats</div>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="hint-text" id="hint-text"></div>
+
+    <div class="options-label">Who is this player?</div>
+    <div class="options-grid" id="options-grid"></div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">NEXT PLAYER ▶</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-screen" id="results-screen">
+    <div class="trophy" id="trophy">🏆</div>
+    <div class="final-score" id="final-score">0</div>
+    <div class="grade-label" id="grade-label">Points</div>
+    <div class="stats-summary">
+      <div class="summary-item"><div class="val" id="res-correct">0</div><div class="lbl">Correct</div></div>
+      <div class="summary-item"><div class="val" id="res-total">10</div><div class="lbl">Questions</div></div>
+      <div class="summary-item"><div class="val" id="res-streak">0</div><div class="lbl">Best Streak</div></div>
+    </div>
+    <button class="replay-btn" onclick="resetGame()">PLAY AGAIN 🔄</button>
+  </div>
+
+</div>
+
+<footer>
+  <p>Stats represent 2024-25 NBA season averages &nbsp;|&nbsp; <a href="scratch.html">Back to Sports Analytics Page</a></p>
+</footer>
+
+<script>
+// ─── PLAYER DATABASE (real 2024-25 stats) ───────────────────────────────────
+const PLAYERS = {
+  easy: [
+    { name:"LeBron James",    team:"Los Angeles Lakers",     pos:"SF", ppg:23.7, rpg:8.9,  apg:8.0,  spg:1.1, bpg:0.6, fg:0.513, three:0.386, ft:0.737, season:"2024-25", hint:"4-time champion, all-time scoring leader" },
+    { name:"Stephen Curry",   team:"Golden State Warriors",  pos:"PG", ppg:24.0, rpg:4.5,  apg:6.1,  spg:1.2, bpg:0.3, fg:0.452, three:0.426, ft:0.924, season:"2024-25", hint:"Greatest shooter of all time, 4× NBA champion" },
+    { name:"Kevin Durant",    team:"Phoenix Suns",           pos:"SF", ppg:27.2, rpg:6.6,  apg:4.0,  spg:0.9, bpg:1.1, fg:0.524, three:0.415, ft:0.871, season:"2024-25", hint:"2× Finals MVP, 2× scoring champion" },
+    { name:"Giannis Antetokounmpo", team:"Milwaukee Bucks",  pos:"PF", ppg:30.4, rpg:11.7, apg:6.5,  spg:1.1, bpg:1.2, fg:0.611, three:0.274, ft:0.672, season:"2024-25", hint:"2× MVP, 2021 NBA champion and Finals MVP" },
+    { name:"Nikola Jokic",    team:"Denver Nuggets",         pos:"C",  ppg:29.6, rpg:12.7, apg:9.0,  spg:1.5, bpg:0.7, fg:0.577, three:0.351, ft:0.824, season:"2024-25", hint:"3× MVP, known for incredible playmaking for a center" },
+    { name:"Luka Doncic",     team:"Los Angeles Lakers",     pos:"PG", ppg:28.0, rpg:8.2,  apg:7.8,  spg:1.2, bpg:0.5, fg:0.455, three:0.371, ft:0.783, season:"2024-25", hint:"Youngest player with 60-point triple double" },
+    { name:"Joel Embiid",     team:"Philadelphia 76ers",     pos:"C",  ppg:24.1, rpg:8.5,  apg:4.3,  spg:0.9, bpg:1.7, fg:0.521, three:0.346, ft:0.878, season:"2024-25", hint:"2023 scoring champion and MVP" },
+    { name:"Jayson Tatum",    team:"Boston Celtics",         pos:"SF", ppg:27.2, rpg:8.1,  apg:4.9,  spg:1.1, bpg:0.6, fg:0.471, three:0.369, ft:0.830, season:"2024-25", hint:"2024 NBA champion and Finals MVP with Boston" },
+  ],
+  medium: [
+    { name:"Anthony Davis",   team:"Los Angeles Lakers",     pos:"C",  ppg:26.2, rpg:12.0, apg:3.5,  spg:1.3, bpg:2.3, fg:0.563, three:0.265, ft:0.793, season:"2024-25", hint:"8× All-Star, 2020 NBA champion" },
+    { name:"Devin Booker",    team:"Phoenix Suns",           pos:"SG", ppg:26.1, rpg:4.1,  apg:6.5,  spg:0.9, bpg:0.4, fg:0.472, three:0.368, ft:0.870, season:"2024-25", hint:"3× All-Star, scored 70 points at age 20" },
+    { name:"Damian Lillard",  team:"Milwaukee Bucks",        pos:"PG", ppg:24.3, rpg:4.3,  apg:7.0,  spg:0.9, bpg:0.3, fg:0.442, three:0.370, ft:0.882, season:"2024-25", hint:"Known for logo-range threes and clutch moments in Portland" },
+    { name:"Kawhi Leonard",   team:"LA Clippers",            pos:"SF", ppg:22.0, rpg:6.3,  apg:3.4,  spg:1.6, bpg:0.7, fg:0.497, three:0.394, ft:0.890, season:"2024-25", hint:"2× Finals MVP with different teams, famous hands" },
+    { name:"Trae Young",      team:"Atlanta Hawks",          pos:"PG", ppg:24.8, rpg:3.2,  apg:11.4, spg:0.9, bpg:0.1, fg:0.432, three:0.347, ft:0.877, season:"2024-25", hint:"Elite playmaker and long-range scorer, plays in Atlanta" },
+    { name:"Ja Morant",       team:"Memphis Grizzlies",      pos:"PG", ppg:21.4, rpg:5.5,  apg:8.1,  spg:1.1, bpg:0.5, fg:0.476, three:0.295, ft:0.764, season:"2024-25", hint:"Explosive athlete, 2022 Most Improved Player" },
+    { name:"Bam Adebayo",     team:"Miami Heat",             pos:"C",  ppg:21.3, rpg:10.4, apg:4.3,  spg:1.1, bpg:0.8, fg:0.549, three:0.200, ft:0.793, season:"2024-25", hint:"5× All-Star, Olympic gold medalist with Team USA" },
+    { name:"Tyrese Haliburton",team:"Indiana Pacers",        pos:"PG", ppg:20.0, rpg:4.6,  apg:9.2,  spg:1.5, bpg:0.4, fg:0.472, three:0.385, ft:0.871, season:"2024-25", hint:"2024 All-Star Game MVP, plays in Indianapolis" },
+    { name:"Zion Williamson", team:"New Orleans Pelicans",   pos:"PF", ppg:24.0, rpg:5.9,  apg:5.0,  spg:1.0, bpg:0.6, fg:0.579, three:0.333, ft:0.724, season:"2024-25", hint:"#1 pick in 2019, known for freakish athleticism" },
+    { name:"Anthony Edwards", team:"Minnesota Timberwolves", pos:"SG", ppg:27.3, rpg:5.3,  apg:5.0,  spg:1.3, bpg:0.6, fg:0.456, three:0.369, ft:0.836, season:"2024-25", hint:"2020 #1 pick, rising superstar in Minnesota" },
+  ],
+  hard: [
+    { name:"Darius Garland",  team:"Cleveland Cavaliers",    pos:"PG", ppg:21.6, rpg:3.1,  apg:7.0,  spg:1.2, bpg:0.2, fg:0.451, three:0.388, ft:0.875, season:"2024-25", hint:"2× All-Star point guard who grew up in Indiana" },
+    { name:"Evan Mobley",     team:"Cleveland Cavaliers",    pos:"C",  ppg:18.6, rpg:9.4,  apg:3.3,  spg:1.1, bpg:1.9, fg:0.543, three:0.375, ft:0.736, season:"2024-25", hint:"2021 Rookie of the Year runner-up, elite defender" },
+    { name:"Franz Wagner",    team:"Orlando Magic",          pos:"SF", ppg:24.2, rpg:5.5,  apg:4.3,  spg:1.1, bpg:0.4, fg:0.474, three:0.366, ft:0.822, season:"2024-25", hint:"German-born star in Orlando, younger Wagner brother" },
+    { name:"Scottie Barnes",  team:"Toronto Raptors",        pos:"PF", ppg:19.9, rpg:8.2,  apg:6.1,  spg:1.3, bpg:0.7, fg:0.477, three:0.343, ft:0.770, season:"2024-25", hint:"2022 Rookie of the Year, versatile forward" },
+    { name:"Alperen Sengun",  team:"Houston Rockets",        pos:"C",  ppg:21.1, rpg:9.4,  apg:5.6,  spg:1.1, bpg:0.9, fg:0.541, three:0.310, ft:0.741, season:"2024-25", hint:"Turkish big man, one of the best young centers in the league" },
+    { name:"Cade Cunningham", team:"Detroit Pistons",        pos:"PG", ppg:23.4, rpg:4.6,  apg:8.7,  spg:1.2, bpg:0.4, fg:0.442, three:0.366, ft:0.835, season:"2024-25", hint:"2021 #1 pick, rebuilding franchise in Detroit" },
+    { name:"Shai Gilgeous-Alexander", team:"Oklahoma City Thunder", pos:"PG", ppg:32.7, rpg:5.5, apg:6.4, spg:2.0, bpg:0.8, fg:0.514, three:0.341, ft:0.876, season:"2024-25", hint:"Canadian star, 2025 MVP and scoring champion" },
+    { name:"Jalen Brunson",   team:"New York Knicks",        pos:"PG", ppg:26.4, rpg:3.6,  apg:7.7,  spg:0.8, bpg:0.2, fg:0.472, three:0.393, ft:0.862, season:"2024-25", hint:"Villanova alum, emerged as NYC's star player" },
+  ]
+};
+
+// ─── GAME STATE ───────────────────────────────────────────────────────────────
+let difficulty = 'easy';
+let score = 0, streak = 0, bestStreak = 0, qIndex = 0;
+let questions = [], timerInterval = null, timeLeft = 15;
+let answered = false;
+const TOTAL_Q = 10;
+
+function setDiff(btn) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  difficulty = btn.dataset.diff;
+}
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function buildQuestions() {
+  const pool = [...PLAYERS.easy];
+  if (difficulty !== 'easy') pool.push(...PLAYERS.medium);
+  if (difficulty === 'hard') pool.push(...PLAYERS.hard);
+  return shuffle(pool).slice(0, TOTAL_Q);
+}
+
+function getWrongOptions(correct, pool) {
+  const others = pool.filter(p => p.name !== correct.name);
+  return shuffle(others).slice(0, 3).map(p => p.name);
+}
+
+function startGame() {
+  const pool = [...PLAYERS.easy, ...PLAYERS.medium, ...PLAYERS.hard];
+  questions = buildQuestions();
+  score = 0; streak = 0; bestStreak = 0; qIndex = 0;
+  updateScoreboard();
+
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('results-screen').classList.remove('visible');
+  showQuestion(pool);
+}
+
+function showQuestion(pool) {
+  if (qIndex >= TOTAL_Q) { endGame(); return; }
+  answered = false;
+
+  const q = questions[qIndex];
+  const allPool = pool || [...PLAYERS.easy, ...PLAYERS.medium, ...PLAYERS.hard];
+  const wrongs = getWrongOptions(q, allPool);
+  const opts = shuffle([q.name, ...wrongs]);
+
+  // Meta
+  document.getElementById('q-num').textContent = `Q ${qIndex + 1} / ${TOTAL_Q}`;
+  document.getElementById('q-fill').style.width = `${((qIndex + 1) / TOTAL_Q) * 100}%`;
+
+  // Team
+  document.getElementById('team-badge').textContent = `🏀 ${q.team}`;
+
+  // Stats
+  const statsGrid = document.getElementById('stats-grid');
+  const timeLimit = difficulty === 'easy' ? 20 : difficulty === 'medium' ? 15 : 10;
+  const showStats = [
+    { val: q.ppg.toFixed(1), name: 'PPG' },
+    { val: q.rpg.toFixed(1), name: 'RPG' },
+    { val: q.apg.toFixed(1), name: 'APG' },
+    { val: q.spg.toFixed(1), name: 'SPG' },
+    { val: q.bpg.toFixed(1), name: 'BPG' },
+    { val: (q.fg * 100).toFixed(1) + '%', name: 'FG%' },
+    { val: (q.three * 100).toFixed(1) + '%', name: '3P%' },
+    { val: (q.ft * 100).toFixed(1) + '%', name: 'FT%' },
+  ];
+  statsGrid.innerHTML = showStats.map(s =>
+    `<div class="stat-box"><div class="stat-val">${s.val}</div><div class="stat-name">${s.name}</div></div>`
+  ).join('');
+
+  // Hint (only on easy)
+  document.getElementById('hint-text').textContent = difficulty === 'easy' ? `💡 Hint: ${q.hint}` : '';
+
+  // Options
+  const optsGrid = document.getElementById('options-grid');
+  optsGrid.innerHTML = opts.map(name =>
+    `<button class="opt-btn" onclick="selectAnswer(this,'${name.replace(/'/g,"\\'")}','${q.name.replace(/'/g,"\\'")}')">
+      ${name}
+    </button>`
+  ).join('');
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+
+  document.getElementById('next-btn').className = 'next-btn';
+  document.getElementById('question-card').className = 'question-card visible';
+
+  // Timer
+  clearInterval(timerInterval);
+  timeLeft = timeLimit;
+  const timerEl = document.getElementById('timer');
+  timerEl.textContent = timeLeft;
+  timerEl.className = 'timer-badge';
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 4) timerEl.className = 'timer-badge urgent';
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      if (!answered) timeUp(q.name);
+    }
+  }, 1000);
+
+  // store current pool for next question
+  document.getElementById('next-btn').onclick = () => nextQuestion(allPool);
+}
+
+function selectAnswer(btn, selected, correct) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedback');
+
+  if (selected === correct) {
+    btn.classList.add('correct');
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+    const multiplier = Math.min(streak, 5);
+    const points = 100 * multiplier;
+    score += points;
+    fb.className = 'feedback correct-fb visible';
+    fb.innerHTML = `✅ Correct! +${points} pts${streak > 1 ? ` (${streak}× streak!)` : ''}`;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.textContent.trim() === correct) b.classList.add('correct');
+    });
+    streak = 0;
+    fb.className = 'feedback wrong-fb visible';
+    fb.innerHTML = `❌ It was <strong>${correct}</strong>`;
+  }
+
+  updateScoreboard();
+  document.getElementById('next-btn').className = 'next-btn visible';
+}
+
+function timeUp(correct) {
+  answered = true;
+  document.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === correct) b.classList.add('correct');
+  });
+  streak = 0;
+  updateScoreboard();
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback wrong-fb visible';
+  fb.innerHTML = `⏱️ Time's up! It was <strong>${correct}</strong>`;
+  document.getElementById('next-btn').className = 'next-btn visible';
+}
+
+function nextQuestion(pool) {
+  qIndex++;
+  showQuestion(pool);
+}
+
+function updateScoreboard() {
+  document.getElementById('score-display').textContent = score.toLocaleString();
+  document.getElementById('streak-display').textContent = streak;
+  document.getElementById('best-display').textContent = bestStreak;
+}
+
+function endGame() {
+  clearInterval(timerInterval);
+  document.getElementById('question-card').className = 'question-card';
+
+  const correct = questions.filter((_, i) => i < TOTAL_Q).length; // approximate
+  const pct = score / (TOTAL_Q * 100 * 5);
+  let trophy = '🥉', grade = 'Not bad — keep studying!';
+  if (score >= 600) { trophy = '🏆'; grade = 'NBA Scout-level knowledge!'; }
+  else if (score >= 350) { trophy = '🥇'; grade = 'Solid hoops IQ!'; }
+  else if (score >= 200) { trophy = '🥈'; grade = 'You know your stuff!'; }
+
+  document.getElementById('trophy').textContent = trophy;
+  document.getElementById('final-score').textContent = score.toLocaleString();
+  document.getElementById('grade-label').textContent = grade;
+  document.getElementById('res-streak').textContent = bestStreak;
+  document.getElementById('res-total').textContent = TOTAL_Q;
+
+  const resultScreen = document.getElementById('results-screen');
+  resultScreen.classList.add('visible');
+}
+
+function resetGame() {
+  document.getElementById('results-screen').classList.remove('visible');
+  document.getElementById('start-screen').style.display = 'block';
+}
+</script>
+</body>
+</html>

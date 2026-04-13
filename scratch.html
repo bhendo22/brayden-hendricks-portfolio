@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sports Analytics | Brayden Hendricks</title>
+  <link rel="stylesheet" href="scratch.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <a href="index.html">&#8592; Back to Portfolio</a>
+    <a href="resume.html">Résumé</a>
+    <a href="app.html">NBA Player Quiz</a>
+  </nav>
+
+  <!-- HERO (Div 1) -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>The Analytics of Hoops</h1>
+      <p class="tagline">Exploring data, scouting, and strategy in basketball.</p>
+      <a href="#about" class="btn-scroll">Explore Data &#8595;</a>
+    </div>
+  </div>
+
+  <!-- ABOUT (Div 2) / ON-PAGE ANCHOR -->
+  <div id="about" class="section">
+    <div class="container">
+      <h2>Why Sports Analytics?</h2>
+      <p>
+        Welcome to my scratch page! I'm <strong>Brayden Hendricks</strong>, and this is where I dive deep into one of my biggest passions: the intersection of data and basketball.
+        Whether it's evaluating high school recruits for college programs or analyzing shot charts in the NBA, analytics has fundamentally changed how the game is played and managed.
+      </p>
+      
+      <div class="img-wrap">
+        <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&q=80" alt="Basketball hoop at night" />
+        <span class="img-caption">The game is evolving off the court as much as on it.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECRUITING HUB (Nested Lists) -->
+  <div id="recruiting" class="section section-alt">
+    <div class="container">
+      <h2>Top Recruiting Hotbeds (2024 Class)</h2>
+      <p>College scouting relies heavily on regional pipelines. Here are the top states producing elite talent, along with notable 5-star prospects:</p>
+
+      <!-- ORDERED LIST containing UNORDERED LISTS -->
+      <ol class="data-list">
+        <li>
+          <strong>Florida (Montverde & IMG Academy influence)</strong>
+          <ul>
+            <li>Cooper Flagg (Duke commit)</li>
+            <li>Derik Queen (Maryland commit)</li>
+            <li>Liam McNeeley (Maryland commit)</li>
+          </ul>
+        </li>
+        <li>
+          <strong>California</strong>
+          <ul>
+            <li>AJ Dybantsa (Uncommitted)</li>
+            <li>Carter Bryant (Arizona commit)</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Texas</strong>
+          <ul>
+            <li>Tre Johnson (Texas commit)</li>
+            <li>Mercy Miller (Houston commit)</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- VIDEO SECTION -->
+  <div id="video" class="section">
+    <div class="container">
+      <h2>Film Breakdown: The Modern NBA Offense</h2>
+      <p>Analytics has pushed the NBA towards pace, space, and the three-point line. Watch this breakdown to see the data in action:</p>
+      <div class="video-wrap">
+        <!-- Embedded YouTube Video -->
+        <iframe 
+          width="560" height="315" 
+          src="https://www.youtube.com/embed/5D2GkR8sS-o" 
+          title="Basketball Analytics Breakdown" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU EMBED SECTION -->
+  <div id="tableau" class="section section-alt">
+    <div class="container">
+      <h2>Interactive Recruiting Dashboard</h2>
+      <p>Interact with the live Tableau graph below to see how college programs evaluate talent across different regions and positions.</p>
+      
+      <div class="tableau-wrap">
+        <!-- Live Embedded Tableau Graph -->
+        <div class='tableauPlaceholder' id='viz1700000000000' style='position: relative'>
+          <noscript><a href='#'><img alt='Dashboard 1' src='https://public.tableau.com/static/images/NC/NCAABasketballRecruiting/Dashboard1/1_rss.png' style='border: none' /></a></noscript>
+          <object class='tableauViz' style='display:none;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+            <param name='embed_code_version' value='3' />
+            <param name='site_root' value='' />
+            <param name='name' value='NCAABasketballRecruiting&#47;Dashboard1' />
+            <param name='tabs' value='no' />
+            <param name='toolbar' value='yes' />
+            <param name='animate_transition' value='yes' />
+            <param name='display_static_image' value='yes' />
+            <param name='display_spinner' value='yes' />
+            <param name='display_overlay' value='yes' />
+            <param name='display_count' value='yes' />
+          </object>
+        </div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1700000000000');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          if ( divElement.offsetWidth > 800 ) { vizElement.style.width='100%';vizElement.style.height='600px';} 
+          else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='100%';vizElement.style.height='600px';} 
+          else { vizElement.style.width='100%';vizElement.style.height='700px';}
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+      <p class="tableau-note"><em>Note: Requires internet connection to load the live dashboard from Tableau Public.</em></p>
+    </div>
+  </div>
+
+  <!-- JUMP LINKS -->
+  <div class="section">
+    <div class="container text-center">
+      <ul class="anchor-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#recruiting">Recruiting Pipelines</a></li>
+        <li><a href="#video">Film Breakdown</a></li>
+        <li><a href="#tableau">Tableau Dashboard</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Brayden Hendricks &mdash; Sports Analytics</p>
+  </footer>
+
+</body>
+</html>

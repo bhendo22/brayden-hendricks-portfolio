@@ -1,0 +1,235 @@
+/* scratch.css — Brayden Hendricks Sports Analytics */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Definition 1: Custom Variables */
+:root {
+  --navy:         #0a1628;
+  --gold:         #c9a84c;
+  --light-bg:     #f8f5f0;
+  --alt-bg:       #e8e2d9;
+  --text-dark:    #1c1c1c;
+  --text-muted:   #444444;
+  --white:        #ffffff;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Definition 2: Body styling (Custom Background & Font rules) */
+body {
+  font-family: var(--font-body);    /* Font family specified */
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-dark);          /* Font color specified */
+  background-color: var(--light-bg);/* Custom background color */
+}
+
+/* Definition 3: Top Navigation */
+.topnav {
+  background-color: var(--navy);
+  padding: 15px 32px;
+  display: flex;
+  gap: 24px;
+}
+
+.topnav a {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.topnav a:hover {
+  color: var(--gold);
+}
+
+/* Definition 4: Hero Block (Div 1) - Custom background image */
+.hero {
+  background-image: url('https://images.unsplash.com/photo-1519861531473-9200262188bf?w=1600&q=80');
+  background-size: cover;
+  background-position: center;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.7); /* Dark navy overlay */
+}
+
+.hero-text {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.tagline {
+  color: var(--gold);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+.btn-scroll {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all 0.3s;
+}
+
+.btn-scroll:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* Definition 5: Section Layout (Div 2) */
+.section {
+  padding: 80px 20px;
+}
+
+.section-alt {
+  background-color: var(--alt-bg);
+}
+
+/* Definition 6: Container Layout (Div 3) */
+.container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.container h2 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--navy);
+  margin-bottom: 1.2rem;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* Image & Media */
+.img-wrap {
+  margin: 2.5rem 0;
+  text-align: center;
+}
+
+.img-wrap img {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.img-caption {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  margin: 2rem 0;
+}
+
+.video-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.tableau-wrap {
+  margin: 2rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Lists */
+.data-list {
+  padding-left: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.data-list > li {
+  margin-bottom: 1.5rem;
+  color: var(--navy);
+  font-size: 1.1rem;
+}
+
+.data-list ul {
+  list-style-type: square;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.data-list ul li {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Anchor Jump Links */
+.anchor-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.anchor-links li a {
+  display: inline-block;
+  padding: 8px 20px;
+  background: var(--navy);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.anchor-links li a:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+/* Footer */
+.footer {
+  background-color: var(--navy);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+}
